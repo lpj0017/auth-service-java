@@ -13,7 +13,7 @@ public class RongAuthClient {
 
 	static {
 		try {
-			AUTH_URL = new URL("http://auth.cn.rong.io/reg.json");
+			AUTH_URL = new URL("http://api.cn.rong.io/user/getToken.json");
 		} catch (Exception ignore) {
 		}
 	}
