@@ -29,7 +29,7 @@ public class RongAuthClient {
 	 */
 	
 	public static String auth(String appKey, String appSecret, String userId,
-			String name, String portraitUri, String deviceId) {
+			String name, String portraitUri) {
 		StringBuilder retSb = null;
 		HttpURLConnection conn = null;
 		try {
@@ -49,8 +49,6 @@ public class RongAuthClient {
 			sb.append("&name=").append(URLEncoder.encode(name, "UTF-8"));
 			sb.append("&portraitUri=").append(
 					URLEncoder.encode(portraitUri, "UTF-8"));
-			sb.append("&deviceId=")
-					.append(URLEncoder.encode(deviceId, "UTF-8"));
 
 			OutputStream out = conn.getOutputStream();
 			out.write(sb.toString().getBytes("UTF-8"));
@@ -80,7 +78,7 @@ public class RongAuthClient {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(auth("inputYourAppKey","inputYourAppSecret","inputYourUserId","inputYourUserName","inputYourUserPortraitUri","inputYourDeviceId"));
+		System.out.println(auth("inputYourAppKey","inputYourAppSecret","inputYourUserId","inputYourUserName","inputYourUserPortraitUri"));
 	}
 	
 }
