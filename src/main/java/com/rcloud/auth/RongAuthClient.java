@@ -29,7 +29,7 @@ public class RongAuthClient {
 	 */
 	
 	public static String auth(String appKey, String appSecret, String userId,
-			String name, String portraitUri) {
+			String name, String portraitUri) throws RongAuthException {
 		StringBuilder retSb = null;
 		HttpURLConnection conn = null;
 		try {
@@ -66,9 +66,24 @@ public class RongAuthClient {
 				}
 				reader.close();
 			}else{
-				return null;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						conn.getErrorStream()));
+				
+	
+				retSb = new StringBuilder();
+				String line;
+				while ((line = reader.readLine()) != null) {
+					retSb.append(line);
+				}
+				reader.close();
+				throw new RongAuthException(conn.getResponseCode(), retSb == null ? null : retSb.toString(), null); 
 			}
-		} catch (Exception ignore) {
+		} catch (Exception ex) {
+			if(ex instanceof RongAuthException){
+				throw (RongAuthException)ex;
+			}else{
+				throw new RongAuthException(502, ex.getMessage(), ex);
+			}
 		} finally {
 			try{
 			conn.disconnect();
@@ -78,7 +93,11 @@ public class RongAuthClient {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(auth("inputYourAppKey","inputYourAppSecret","inputYourUserId","inputYourUserName","inputYourUserPortraitUri"));
+		try {
+			System.out.println(auth("inputYourAppKey","inputYourAppSecret","inputYourUserId","inputYourUserName","inputYourUserPortraitUri"));
+		} catch (RongAuthException e) {
+			System.err.println("Error getting token from api server, errorCode="+e.getErrorCode()+", errorMessage="+e.getMessage());
+		}
 	}
 	
 }
